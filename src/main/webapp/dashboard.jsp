@@ -31,6 +31,7 @@
             <a href="dashboard.jsp?section=profile" class="<%= "profile".equals(request.getParameter("section")) || request.getParameter("section") == null ? "active" : "" %>">网站用户信息</a>
             <a href="dashboard.jsp?section=gameinfo" class="<%= "gameinfo".equals(request.getParameter("section")) || request.getParameter("section") == null ? "active" : "" %>">游戏资料</a>
             <a href="dashboard.jsp?section=usermanage" class="<%= "usermanage".equals(request.getParameter("section")) ? "active" : "" %>">用户管理</a>
+            <a href="dashboard.jsp?section=banmanage" class="<%= "banmanage".equals(request.getParameter("section")) ? "active" : "" %>">封禁管理</a>
             <%
             } else if ("user".equals(userRole)) {
             %>
@@ -57,6 +58,8 @@
     %><jsp:include page="UserManageView/profile.jsp" /> <%
     }else if ("usermanage".equals(section)) {
     %><jsp:include page="UserManageView/user-management.jsp" />
+        <%}else if ("banmanage".equals(section)) {
+        %><jsp:include page="UserManageView/ban-management.jsp" />
         <%}else if ("gameinfo".equals(section)) {
         %><jsp:include page="UserManageView/gameinfo.jsp" />
         <%}else {

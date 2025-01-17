@@ -122,7 +122,16 @@
     <button type="button" onclick="closeEditModal()">取消</button>
   </form>
 </div>
-
+<!-- 弹出封禁对话框 -->
+<div id="banDialog" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 8px rgba(0, 0, 0, 0.2);">
+  <h3>封禁玩家</h3>
+  <label for="banReason">封禁原因:</label>
+  <input type="text" id="banReason" placeholder="请输入封禁原因"><br>
+  <label for="banEndTime">封禁结束时间:</label>
+  <input type="datetime-local" id="banEndTime"><br>
+  <button onclick="submitBan()">提交封禁</button>
+  <button onclick="closeBanDialog()">关闭</button>
+</div>
 <script src="js/usermanage.js"></script>
 </body>
 </html>

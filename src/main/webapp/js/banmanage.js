@@ -4,31 +4,28 @@ let currentSearch = ""; // 当前搜索内容
 // 加载数据（支持分页和搜索）
 function loadPage(page, search = "") {
     currentSearch = search; // 记录搜索条件
-    fetch(`LoadPlayerData?page=${page}&search=${encodeURIComponent(search)}`)
+    fetch(`LoadBanData?page=${page}&search=${encodeURIComponent(search)}`)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById("tableBody");
             tableBody.innerHTML = ""; // 清空旧数据
 
             if (data.length === 0) {
-                tableBody.innerHTML = "<tr><td colspan='8'>未找到符合条件的玩家</td></tr>";
+                tableBody.innerHTML = "<tr><td colspan='8'>未找到符合条件的记录</td></tr>";
                 updatePagination(page);
                 return;
             }
 
-            data.forEach(player => {
+            data.forEach(ban => {
                 const row = `
                     <tr>
-                        <td>${player.userid}</td>
-                        <td>${player.nickname}</td>
-                        <td>${player.level}</td>
-                        <td>${player.chenghao}</td>
-                        <td>${player.point}</td>
-                        <td>${player.catfood}</td>
-                        <td>${player.admin}</td>
+                        <td>${ban.userid}</td>
+                        <td>${ban.reason}</td>
+                        <td>${ban.starttime}</td>
+                        <td>${ban.endtime}</td>
                         <td>                
-                            <button onclick='openEditModal(${JSON.stringify(player)})'>编辑</button>
-                            <button onclick='openBanDialog("${player.userid}")'>封禁</button>
+                            <button onclick='openEditModal(${JSON.stringify(ban)})'>编辑</button>
+                            <button onclick='openBanDialog("${ban.id}")'>删除</button>
                         </td>
                     </tr>
                 `;
@@ -40,7 +37,7 @@ function loadPage(page, search = "") {
 }
 
 // 搜索玩家
-function searchPlayer() {
+function searchBan() {
     const searchInput = document.getElementById("searchInput").value.trim();
     loadPage(1, searchInput); // 搜索时从第一页开始加载
 }
@@ -58,17 +55,21 @@ function updatePagination(page) {
 // 初始化加载第一页
 loadPage(1);
 // 打开编辑模态框
-function openEditModal(player) {
-    const fields = ["id", "userid", "nickname", "point", "catfood", "catfoodmutiply", "exp", "expmutiply", "level", "killnum", "mvptime", "mvpmusic", "chenghao", "chenghaocolor", "admin", "overtime", "manrenjinfu", "jishayinxiao","jinfuguangbo", "youxian"];
+function openEditModal(ban) {
+    const fields = ["id", "userid","reason", "starttime", "endtime"];
     fields.forEach(field => {
         const input = document.getElementById(field);
         if (input) {
-            if (field === "overtime" && player[field]) {
+            if (field === "starttime" && ban[field]) {
                 // 格式化时间为 datetime-local 格式
-                const date = new Date(player[field]);
+                const date = new Date(ban[field]);
+                input.value = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+            }else if(field ==="endtime" && ban[field]){
+                // 格式化时间为 datetime-local 格式
+                const date = new Date(ban[field]);
                 input.value = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
             } else {
-                input.value = player[field] || ""; // 默认值为空字符串
+                input.value = ban[field] || ""; // 默认值为空字符串
             }
         }
     });
@@ -81,7 +82,7 @@ function closeEditModal() {
 }
 
 // 提交编辑表单
-function submitEditUserManage() {
+function submitEditBanManage() {
     const form = document.getElementById("editForm");
     const formData = new FormData(form);
 
@@ -94,7 +95,7 @@ function submitEditUserManage() {
         data[key] = value;
     });
 
-    fetch("EditPlayerServlet", {
+    fetch("EditBanServlet", {
         method: "POST",
         headers: {
             'Content-Type': 'application/json;charset=UTF-8'
@@ -120,40 +121,4 @@ function submitEditUserManage() {
 function formatDate(date) {
     const isoString = new Date(date).toISOString(); // 转换为 ISO 8601 格式
     return isoString;  // 例如: "2029-12-31T16:00:00.000Z"
-}
-function openBanDialog(userId) {
-    // 打开封禁对话框并保存玩家ID
-    document.getElementById('banDialog').style.display = 'block';
-    currentUserId = userId; // 保存当前玩家ID
-}
-
-function closeBanDialog() {
-    document.getElementById('banDialog').style.display = 'none';
-}
-
-function submitBan() {
-    const reason = document.getElementById('banReason').value;
-    const endTime = document.getElementById('banEndTime').value;
-
-    // 发送封禁请求到后端
-    fetch('BanPlayerServlet', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            userid: currentUserId,
-            reason: reason,
-            endtime: endTime
-        })
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("封禁成功");
-                closeBanDialog();  // 关闭封禁对话框
-            } else {
-                alert("封禁失败：" + data.message);
-            }
-        });
 }
