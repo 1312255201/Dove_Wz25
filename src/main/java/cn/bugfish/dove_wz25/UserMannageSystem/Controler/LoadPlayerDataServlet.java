@@ -42,13 +42,26 @@ public class LoadPlayerDataServlet extends HttpServlet {
             rs = stmt.executeQuery();
             while (rs.next()) {
                 Player player = new Player();
+                player.setId(rs.getInt("id"));
                 player.setUserid(rs.getString("userid"));
                 player.setNickname(rs.getString("nickname"));
-                player.setLevel(rs.getString("level"));
+                player.setPoint(rs.getInt("point"));
+                player.setCatfood(rs.getInt("catfood"));
+                player.setCatfoodmutiply(rs.getInt("catfoodmutiply"));
+                player.setExp(rs.getInt("exp"));
+                player.setExpmutiply(rs.getInt("expmutiply"));
+                player.setLevel(rs.getInt("level"));
+                player.setKillnum(rs.getInt("killnum"));
+                player.setMvptime(rs.getInt("mvptime"));
+                player.setMvpmusic(rs.getString("mvpmusic"));
                 player.setChenghao(rs.getString("chenghao"));
-                player.setPoint(rs.getString("point"));
-                player.setCatfood(rs.getString("catfood"));
+                player.setChenghaocolor(rs.getString("chenghaocolor"));
                 player.setAdmin(rs.getString("admin"));
+                player.setOvertime(rs.getTimestamp("overtime"));
+                player.setManrenjinfu(rs.getString("manrenjinfu"));
+                player.setJishayinxiao(rs.getString("jishayinxiao"));
+                player.setJinfuguangbo(rs.getString("jinfuguangbo"));
+                player.setYouxian(rs.getString("youxian"));
                 players.add(player);
             }
         } catch (Exception e) {

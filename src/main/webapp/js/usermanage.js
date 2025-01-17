@@ -26,8 +26,8 @@ function loadPage(page, search = "") {
                         <td>${player.point}</td>
                         <td>${player.catfood}</td>
                         <td>${player.admin}</td>
-                        <td>
-                            <button class="edit-btn" onclick="openEditModal('${player.userid}', '${player.nickname}', '${player.level}', '${player.point}', '${player.catfood}', '${player.admin}')">编辑</button>
+                        <td>                
+                            <button onclick='openEditModal(${JSON.stringify(player)})'>编辑</button>
                         </td>
                     </tr>
                 `;
@@ -56,3 +56,67 @@ function updatePagination(page) {
 
 // 初始化加载第一页
 loadPage(1);
+// 打开编辑模态框
+function openEditModal(player) {
+    const fields = ["id", "userid", "nickname", "point", "catfood", "catfoodmutiply", "exp", "expmutiply", "level", "killnum", "mvptime", "mvpmusic", "chenghao", "chenghaocolor", "admin", "overtime", "manrenjinfu", "jishayinxiao","jinfuguangbo", "youxian"];
+    fields.forEach(field => {
+        const input = document.getElementById(field);
+        if (input) {
+            if (field === "overtime" && player[field]) {
+                // 格式化时间为 datetime-local 格式
+                const date = new Date(player[field]);
+                input.value = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+            } else {
+                input.value = player[field] || ""; // 默认值为空字符串
+            }
+        }
+    });
+    document.getElementById("editModal").style.display = "block";
+}
+
+// 关闭编辑模态框
+function closeEditModal() {
+    document.getElementById("editModal").style.display = "none";
+}
+
+// 提交编辑表单
+function submitEditUserManage() {
+    const form = document.getElementById("editForm");
+    const formData = new FormData(form);
+
+    // 转换 FormData 为 JSON
+    const data = {};
+    formData.forEach((value, key) => {
+        if (key === "overtime" ){
+            value = formatDate(value);
+        }
+        data[key] = value;
+    });
+
+    fetch("EditPlayerServlet", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify(data),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("保存成功！");
+                closeEditModal();
+                loadPage(currentPage); // 重新加载当前页
+            } else {
+                alert("保存失败：" + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("提交失败:", error);
+            alert("提交失败，请稍后重试！");
+        });
+}
+
+function formatDate(date) {
+    const isoString = new Date(date).toISOString(); // 转换为 ISO 8601 格式
+    return isoString;  // 例如: "2029-12-31T16:00:00.000Z"
+}

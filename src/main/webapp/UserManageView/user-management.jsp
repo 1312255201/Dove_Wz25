@@ -19,7 +19,7 @@
 <table id="userTable">
   <thead>
   <tr>
-    <th>steam64id</th>
+    <th>Steam64ID</th>
     <th>游戏名</th>
     <th>等级</th>
     <th>称号</th>
@@ -36,6 +36,91 @@
 
 <div id="pagination">
   <!-- 分页按钮 -->
+</div>
+
+<!-- 编辑模态框 -->
+<div id="editModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 8px rgba(0, 0, 0, 0.2);">
+  <form id="editForm">
+    <input type="hidden" id="id" name="id">
+    <div>
+      <label for="userid">Steam64ID:</label>
+      <input type="text" id="userid" name="userid" readonly>
+    </div>
+    <div>
+      <label for="nickname">游戏名:</label>
+      <input type="text" id="nickname" name="nickname" readonly>
+    </div>
+    <div>
+      <label for="point">积分:</label>
+      <input type="number" id="point" name="point" required>
+    </div>
+    <div>
+      <label for="catfood">猫粮:</label>
+      <input type="number" id="catfood" name="catfood" required>
+    </div>
+    <div>
+      <label for="catfoodmutiply">猫粮倍数:</label>
+      <input type="number" id="catfoodmutiply" name="catfoodmutiply" required>
+    </div>
+    <div>
+      <label for="exp">经验:</label>
+      <input type="number" id="exp" name="exp" required>
+    </div>
+    <div>
+      <label for="expmutiply">经验倍数:</label>
+      <input type="number" id="expmutiply" name="expmutiply" required>
+    </div>
+    <div>
+      <label for="level">等级:</label>
+      <input type="number" id="level" name="level" required>
+    </div>
+    <div>
+      <label for="killnum">总击杀数:</label>
+      <input type="number" id="killnum" name="killnum" readonly>
+    </div>
+    <div>
+      <label for="mvptime">MVP次数:</label>
+      <input type="number" id="mvptime" name="mvptime" readonly>
+    </div>
+    <div>
+      <label for="mvpmusic">MVP音乐盒:</label>
+      <input type="text" id="mvpmusic" name="mvpmusic" required>
+    </div>
+    <div>
+      <label for="chenghao">称号:</label>
+      <input type="text" id="chenghao" name="chenghao" required>
+    </div>
+    <div>
+      <label for="chenghaocolor">称号颜色:</label>
+      <input type="text" id="chenghaocolor" name="chenghaocolor" required>
+    </div>
+    <div>
+      <label for="admin">权限组:</label>
+      <input type="text" id="admin" name="admin" required>
+    </div>
+    <div>
+      <label for="overtime">权限组过期时间:</label>
+      <input type="datetime-local" id="overtime" name="overtime" required>
+    </div>
+    <div>
+      <label for="manrenjinfu">满人进服:</label>
+      <input type="text" id="manrenjinfu" name="manrenjinfu" required>
+    </div>
+    <div>
+      <label for="jishayinxiao">击杀音效:</label>
+      <input type="text" id="jishayinxiao" name="jishayinxiao" required>
+    </div>
+    <div>
+      <label for="jinfuguangbo">进服广播:</label>
+      <input type="text" id="jinfuguangbo" name="jinfuguangbo" required>
+    </div>
+    <div>
+      <label for="youxian">优先:</label>
+      <input type="text" id="youxian" name="youxian" required>
+    </div>
+    <button type="button" onclick="submitEditUserManage()">保存</button>
+    <button type="button" onclick="closeEditModal()">取消</button>
+  </form>
 </div>
 
 <script src="js/usermanage.js"></script>
