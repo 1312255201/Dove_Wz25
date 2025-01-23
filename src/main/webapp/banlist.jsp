@@ -24,9 +24,9 @@
       <!-- 滚动条目将在这里动态插入 -->
     </ul>
   </div>
-
+  <p><a href="index.jsp">返回主页</a></p>
 </div>
-
+<br>
 <script src="js/banlist.js">
 
 </script>
