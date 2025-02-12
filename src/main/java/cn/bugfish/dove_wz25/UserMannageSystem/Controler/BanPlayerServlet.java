@@ -47,6 +47,7 @@ public class BanPlayerServlet extends HttpServlet {
             e.printStackTrace();
             response.getWriter().write("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
         } finally {
+            DBUtil.closeConnection(conn);
         }
     }
 }

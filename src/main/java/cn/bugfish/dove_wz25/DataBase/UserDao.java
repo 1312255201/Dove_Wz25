@@ -15,6 +15,7 @@ public class UserDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, value);
             ps.setInt(2, user.getId());
+            DBUtil.closeConnection(conn);
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -28,6 +29,7 @@ public class UserDao {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, Userid);
             ResultSet rs = ps.executeQuery();
+            DBUtil.closeConnection(conn);
             if (rs.next()) {
                 return new User(rs.getInt("id"),
                         rs.getString("role"),

@@ -65,7 +65,7 @@ public class EditUserServlet extends HttpServlet {
             // 关闭PreparedStatement对象
             try { if (pstmt != null) pstmt.close(); } catch (SQLException ignored) {}
             // 关闭数据库连接
-            try { if (conn != null) conn.close(); } catch (SQLException ignored) {}
+            if (conn != null)             DBUtil.closeConnection(conn);
         }
     }
 }

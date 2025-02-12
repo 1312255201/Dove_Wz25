@@ -107,6 +107,8 @@ public class LoginServlet extends HttpServlet {
             UserMannageSystemLoger.logger.error(e.getStackTrace());
             response.sendRedirect("login.jsp?error=databaseError");
         } finally {
+            DBUtil.closeConnection(conn);
+
         }
     }
 }

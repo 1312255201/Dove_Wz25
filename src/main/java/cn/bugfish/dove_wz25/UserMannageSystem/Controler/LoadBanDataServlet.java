@@ -53,6 +53,7 @@ public class LoadBanDataServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            DBUtil.closeConnection(conn);
         }
 
         response.setContentType("application/json;charset=UTF-8");

@@ -76,7 +76,8 @@ public class PlayerInfoServlet extends HttpServlet {
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
-                if (conn != null) conn.close();
+                if (conn != null)             DBUtil.closeConnection(conn);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -38,7 +38,7 @@ public class UserService {
         } finally {
             // 关闭数据库连接，释放资源
             if (conn!= null) {
-                conn.close();
+                DBUtil.closeConnection(conn);
             }
         }
     }
