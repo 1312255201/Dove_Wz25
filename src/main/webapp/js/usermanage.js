@@ -58,15 +58,38 @@ function updatePagination(page) {
 // 初始化加载第一页
 loadPage(1);
 // 打开编辑模态框
+function parseUTCDate(dateString) {
+    dateString = dateString.replace(/[\u202F\u00A0]/g, ' '); // 替换特殊空格
+    const parts = dateString.split(/[,:\s]+/);
+    if (parts.length < 7) return new Date(NaN); // 无效格式处理
+
+    const months = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
+        jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+    const monthStr = parts[0].toLowerCase().substring(0, 3);
+    const month = months[monthStr];
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+    let hour = parseInt(parts[3], 10);
+    const minute = parseInt(parts[4], 10);
+    const second = parseInt(parts[5], 10);
+    const ampm = parts[6].toUpperCase();
+
+    // 转换AM/PM到24小时制
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    else if (ampm === 'AM' && hour === 12) hour = 0;
+
+    return new Date(Date.UTC(year, month, day, hour, minute, second));
+}
 function openEditModal(player) {
     const fields = ["id", "userid", "nickname", "point", "catfood", "catfoodmutiply", "exp", "expmutiply", "level", "killnum", "mvptime", "mvpmusic", "chenghao", "chenghaocolor", "admin", "overtime", "manrenjinfu", "jishayinxiao","jinfuguangbo", "youxian"];
     fields.forEach(field => {
         const input = document.getElementById(field);
         if (input) {
             if (field === "overtime" && player[field]) {
-                // 格式化时间为 datetime-local 格式
-                const date = new Date(player[field]);
-                input.value = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+                const date = parseUTCDate(player[field]);
+                // 转换为ISO字符串并格式化
+                const isoString = date.toISOString();
+                input.value = isoString.slice(0, 16).replace('T', ' ');
             } else {
                 input.value = player[field] || ""; // 默认值为空字符串
             }
@@ -90,6 +113,20 @@ function submitEditUserManage() {
     formData.forEach((value, key) => {
         if (key === "overtime" ){
             value = formatDate(value);
+        }
+        if(key === "point")
+        {
+            if(value === "" || value === undefined)
+            {
+                value = "0";
+            }
+        }
+        if(key === "catfood")
+        {
+            if(value === "" || value === undefined)
+            {
+                value = "0";
+            }
         }
         data[key] = value;
     });

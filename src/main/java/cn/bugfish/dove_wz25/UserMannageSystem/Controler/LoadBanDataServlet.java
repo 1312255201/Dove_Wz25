@@ -47,7 +47,7 @@ public class LoadBanDataServlet extends HttpServlet {
                 banState.setUserid(rs.getString("userid"));
                 banState.setReason(rs.getString("reason"));
                 banState.setStarttime(rs.getTimestamp("starttime"));
-                banState.setEndtime(rs.getTimestamp("endtime").toLocalDateTime());
+                banState.setEndtime(rs.getTimestamp("endtime"));
                 banstates.add(banState);
             }
         } catch (Exception e) {

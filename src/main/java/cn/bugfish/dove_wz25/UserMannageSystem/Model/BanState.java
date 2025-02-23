@@ -8,7 +8,7 @@ public class BanState {
     private String userid;
     private String reason;
     private Timestamp starttime;
-    private LocalDateTime endtime;
+    private Timestamp endtime;
 
     public int getId() {
         return id;
@@ -42,11 +42,11 @@ public class BanState {
         this.starttime = starttime;
     }
 
-    public LocalDateTime getEndtime() {
+    public Timestamp getEndtime() {
         return endtime;
     }
 
-    public void setEndtime(LocalDateTime endtime) {
+    public void setEndtime(Timestamp endtime) {
         this.endtime = endtime;
     }
 }

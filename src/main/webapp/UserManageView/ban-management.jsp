@@ -19,6 +19,7 @@
 <table id="userTable">
   <thead>
   <tr>
+    <th>封禁编号</th>
     <th>Steam64ID</th>
     <th>原因</th>
     <th>封禁时间</th>
@@ -38,6 +39,10 @@
 <!-- 编辑模态框 -->
 <div id="editModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 8px rgba(0, 0, 0, 0.2);">
   <form id="editForm">
+    <div>
+      <label for="id">封禁编号(勿动):</label>
+      <input type="text" id="id" name="id" required>
+    </div>
     <div>
       <label for="reason">封禁原因:</label>
       <input type="text" id="reason" name="reason" required>

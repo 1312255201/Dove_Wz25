@@ -19,13 +19,14 @@ function loadPage(page, search = "") {
             data.forEach(ban => {
                 const row = `
                     <tr>
+                        <td>${ban.id}</td>
                         <td>${ban.userid}</td>
                         <td>${ban.reason}</td>
                         <td>${ban.starttime}</td>
                         <td>${ban.endtime}</td>
                         <td>                
                             <button onclick='openEditModal(${JSON.stringify(ban)})'>编辑</button>
-                            <button onclick='openBanDialog("${ban.id}")'>删除</button>
+                            <button onclick='deleteBanInfo("${ban.id}")'>删除</button>
                         </td>
                     </tr>
                 `;
@@ -54,26 +55,74 @@ function updatePagination(page) {
 
 // 初始化加载第一页
 loadPage(1);
-// 打开编辑模态框
+function parseUTCDate(dateString) {
+    dateString = dateString.replace(/[\u202F\u00A0]/g, ' '); // 替换特殊空格
+    const parts = dateString.split(/[,:\s]+/);
+    if (parts.length < 7) return new Date(NaN); // 无效格式处理
+
+    const months = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
+        jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+    const monthStr = parts[0].toLowerCase().substring(0, 3);
+    const month = months[monthStr];
+    const day = parseInt(parts[1], 10);
+    const year = parseInt(parts[2], 10);
+    let hour = parseInt(parts[3], 10);
+    const minute = parseInt(parts[4], 10);
+    const second = parseInt(parts[5], 10);
+    const ampm = parts[6].toUpperCase();
+
+    // 转换AM/PM到24小时制
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    else if (ampm === 'AM' && hour === 12) hour = 0;
+
+    return new Date(Date.UTC(year, month, day, hour, minute, second));
+}
+
 function openEditModal(ban) {
-    const fields = ["id", "userid","reason", "starttime", "endtime"];
+    const fields = ["id", "userid", "reason", "starttime", "endtime"];
     fields.forEach(field => {
         const input = document.getElementById(field);
         if (input) {
-            if (field === "starttime" && ban[field]) {
-                // 格式化时间为 datetime-local 格式
-                const date = new Date(ban[field]);
-                input.value = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
-            }else if(field ==="endtime" && ban[field]){
-                // 格式化时间为 datetime-local 格式
-                const date = new Date(ban[field]);
-                input.value = date.toISOString().slice(0, 16); // yyyy-MM-ddTHH:mm
+            if (field === "starttime" || field === "endtime") {
+                if (ban[field]) {
+                    const date = parseUTCDate(ban[field]);
+                    // 转换为ISO字符串并格式化
+                    const isoString = date.toISOString();
+                    input.value = isoString.slice(0, 16).replace('T', ' ');
+                } else {
+                    input.value = ""; // 处理空值
+                }
             } else {
-                input.value = ban[field] || ""; // 默认值为空字符串
+                input.value = ban[field] || "";
             }
         }
     });
     document.getElementById("editModal").style.display = "block";
+}
+
+function deleteBanInfo(id){
+    fetch("DeleteBanServlet", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify({'id':id}),
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("删除成功！");
+                closeEditModal();
+                loadPage(currentPage); // 重新加载当前页
+            } else {
+                alert("删除失败：" + data.message);
+            }
+        })
+        .catch(error => {
+            console.error("提交失败:", error);
+            alert("提交失败，请稍后重试！");
+        });
+
 }
 
 // 关闭编辑模态框
@@ -89,7 +138,7 @@ function submitEditBanManage() {
     // 转换 FormData 为 JSON
     const data = {};
     formData.forEach((value, key) => {
-        if (key === "overtime" ){
+        if (key === "endtime" ){
             value = formatDate(value);
         }
         data[key] = value;

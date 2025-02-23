@@ -52,11 +52,11 @@
     </div>
     <div>
       <label for="point">积分:</label>
-      <input type="number" id="point" name="point" required>
+      <input type="text" id="point" name="point" required>
     </div>
     <div>
       <label for="catfood">猫粮:</label>
-      <input type="number" id="catfood" name="catfood" required>
+      <input type="text" id="catfood" name="catfood" required>
     </div>
     <div>
       <label for="catfoodmutiply">猫粮倍数:</label>
@@ -64,23 +64,23 @@
     </div>
     <div>
       <label for="exp">经验:</label>
-      <input type="number" id="exp" name="exp" required>
+      <input type="text" id="exp" name="exp" required>
     </div>
     <div>
       <label for="expmutiply">经验倍数:</label>
-      <input type="number" id="expmutiply" name="expmutiply" required>
+      <input type="number" id="expmutiply" name="expmutiply" required value="1" onfocus="this.value = ''" onblur="if(this.value === '') { this.value = '1'; }">
     </div>
     <div>
       <label for="level">等级:</label>
-      <input type="number" id="level" name="level" required>
+      <input type="text" id="level" name="level" required>
     </div>
     <div>
       <label for="killnum">总击杀数:</label>
-      <input type="number" id="killnum" name="killnum" readonly>
+      <input type="text" id="killnum" name="killnum" readonly>
     </div>
     <div>
       <label for="mvptime">MVP次数:</label>
-      <input type="number" id="mvptime" name="mvptime" readonly>
+      <input type="text" id="mvptime" name="mvptime" readonly>
     </div>
     <div>
       <label for="mvpmusic">MVP音乐盒:</label>
